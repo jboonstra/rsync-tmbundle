@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>mainMenu</key>
+	<dict>
+		<key>items</key>
+		<array>
+			<string>12B5F9B7-1352-41A3-8F37-8605B81D4253</string>
+			<string>4EE5F02C-62AB-44AD-8883-FD0DFA0E53F8</string>
+			<string>------------------------------------</string>
+			<string>21B7AA9F-66EB-4ADD-A66F-AF60D55C51A9</string>
+		</array>
+		<key>submenus</key>
+		<dict/>
+	</dict>
+	<key>name</key>
+	<string>Rsync</string>
+	<key>ordering</key>
+	<array>
+		<string>12B5F9B7-1352-41A3-8F37-8605B81D4253</string>
+		<string>4EE5F02C-62AB-44AD-8883-FD0DFA0E53F8</string>
+		<string>21B7AA9F-66EB-4ADD-A66F-AF60D55C51A9</string>
+		<string>CD25E296-86CD-4D77-AAAB-E43593686427</string>
+	</array>
+	<key>uuid</key>
+	<string>3FF93D29-4A2E-4677-BE01-292FECF676B7</string>
+</dict>
+</plist>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveModifiedFiles</string>
+	<key>command</key>
+	<string>if [ -z "$TM_PROJ_REMOTE_DIR" -o -z "$TM_PROJ_SSH_USERHOST" ]; then
+	echo '&lt;strong&gt;Error:&lt;/strong&gt; Need to set &lt;tt&gt;$TM_PROJ_REMOTE_DIR&lt;/tt&gt; and &lt;tt&gt;$TM_PROJ_SSH_USERHOST&lt;/tt&gt;.';
+	exit;
+fi
+if [ "$TM_PROJ_LOCAL_DIR" ]; then
+  echo '&lt;strong&gt;Error:&lt;/strong&gt; You have &lt;tt&gt;$TM_PROJ_LOCAL_DIR&lt;/tt&gt; set, which is deprecated.  Please update your project settings.';
+  exit;
+fi
+
+# check to be sure we're on the master branch (TODO: fix for SVN)
+# pull SVN status if we're in SVN, else assume git
+if [ -x '.svn' ]
+then
+  echo '&lt;strong&gt;Error:&lt;/strong&gt; implement check for trunk before syncing an SVN repo live.'
+  exit;
+else
+  branch=`$TM_GIT branch --no-color | grep '*' | cut -c3-`
+  if [ $branch != "master" ]; then
+    echo '&lt;strong&gt;Error:&lt;/strong&gt; you should only sync to the live site from the master branch.';
+    exit;
+  fi
+fi
+
+TM_PROJ_LOCAL_DIR="$TM_PROJECT_DIRECTORY/$TM_PROJ_DIR_PREFIX";
+res=$(CocoaDialog ok-msgbox --title "Okay to rsync?" --text "Are you sure you want to push live?");
+if [ $res -eq "1" ]; then
+	echo '&lt;pre&gt;';
+	/usr/bin/rsync -rtlvO --cvs-exclude -e ssh --exclude ".ke*" --include "core" $TM_PROJ_LOCAL_DIR $TM_PROJ_SSH_USERHOST:$TM_PROJ_REMOTE_DIR;
+	echo '&lt;/pre&gt;';
+else
+  echo "project not synced";
+fi
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^~@r</string>
+	<key>name</key>
+	<string>rsync full (LIVE)</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>uuid</key>
+	<string>21B7AA9F-66EB-4ADD-A66F-AF60D55C51A9</string>
+</dict>
+</plist>

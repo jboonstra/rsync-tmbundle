@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveModifiedFiles</string>
+	<key>command</key>
+	<string>if [ -z "$TM_PROJ_REMOTE_DIR_DEV" -o -z "$TM_PROJ_SSH_USERHOST" ]; then
+	echo '&lt;strong&gt;Error:&lt;/strong&gt; Need to set &lt;tt&gt;$TMPROJ_REMOTE_DIR_DEV&lt;/tt&gt; and &lt;tt&gt;$TM_PROJ_SSH_USERHOST&lt;/tt&gt;.';
+	exit;
+fi
+if [ "$TM_PROJ_LOCAL_DIR" ]; then
+  echo '&lt;strong&gt;Error:&lt;/strong&gt; You have &lt;tt&gt;$TM_PROJ_LOCAL_DIR&lt;/tt&gt; set, which is deprecated.  Please update your project settings.';
+  exit;
+fi
+
+TM_PROJ_LOCAL_DIR="$TM_PROJECT_DIRECTORY/$TM_PROJ_DIR_PREFIX";
+echo '&lt;pre&gt;'; /usr/bin/rsync -rtlvO --cvs-exclude -e ssh --exclude ".ke*" --include "core" $TM_PROJ_LOCAL_DIR $TM_PROJ_SSH_USERHOST:$TM_PROJ_REMOTE_DIR_DEV; echo '&lt;/pre&gt;';
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^~@r</string>
+	<key>name</key>
+	<string>rsync full (DEV)</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>uuid</key>
+	<string>4EE5F02C-62AB-44AD-8883-FD0DFA0E53F8</string>
+</dict>
+</plist>

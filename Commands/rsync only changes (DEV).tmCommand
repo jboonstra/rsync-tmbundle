@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveModifiedFiles</string>
+	<key>command</key>
+	<string>if [ -z "$TM_PROJ_REMOTE_DIR_DEV" -o -z "$TM_PROJ_SSH_USERHOST" ]; then
+	echo '&lt;strong&gt;Error:&lt;/strong&gt; Need to set &lt;tt&gt;$TMPROJ_REMOTE_DIR_DEV&lt;/tt&gt; and &lt;tt&gt;$TM_PROJ_SSH_USERHOST&lt;/tt&gt;.';
+	exit;
+fi
+if [ "$TM_PROJ_LOCAL_DIR" ]; then
+  echo '&lt;strong&gt;Error:&lt;/strong&gt; You have &lt;tt&gt;$TM_PROJ_LOCAL_DIR&lt;/tt&gt; set, which is deprecated.  Please update your project settings.';
+  exit;
+fi
+
+TM_PROJ_LOCAL_DIR="$TM_PROJECT_DIRECTORY/$TM_PROJ_DIR_PREFIX";
+tmpfile='/tmp/tosync.txt';
+cd $TM_PROJ_LOCAL_DIR;
+echo ${TM_FILEPATH#$TM_PROJ_LOCAL_DIR} &gt; $tmpfile;
+
+# pull SVN status if we're in SVN, else assume git
+if [ -x '.svn' ]
+then
+  svn status | egrep '^[AC?M]' | cut -c9- &gt;&gt; $tmpfile;
+else
+  $TM_GIT status -s | cut -c4- | grep -v '^\.\.' &gt;&gt; $tmpfile;
+fi
+
+cmd="/usr/bin/rsync -rtlvO --files-from=$tmpfile $TM_PROJ_LOCAL_DIR $TM_PROJ_SSH_USERHOST:$TM_PROJ_REMOTE_DIR_DEV;"
+echo '&lt;pre&gt;';
+$cmd;
+echo '&lt;/pre&gt;';
+#rm $tmpfile;</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^~@r</string>
+	<key>name</key>
+	<string>rsync only changes (DEV)</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>uuid</key>
+	<string>12B5F9B7-1352-41A3-8F37-8605B81D4253</string>
+</dict>
+</plist>
